@@ -1,4 +1,8 @@
-import java.util.ArrayList;
+package game.player;
+
+import game.cartes.CarteDeveleppement;
+import game.cartes.CarteResource;
+
 import java.util.HashMap;
 import java.awt.*;
 
@@ -15,6 +19,8 @@ public class Joueur {
     private int nbVilles = 0;
 
     private int pointsVictoire = 2;
+
+    private boolean[] ports = {false, false, false, false, false, false};
     /*
     Couleurs possibles:
         -> Noir

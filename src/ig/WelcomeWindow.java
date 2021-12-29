@@ -1,5 +1,6 @@
+package ig;
+
 import javax.swing.*;
-import java.awt.*;
 
 public class WelcomeWindow extends JFrame {
 

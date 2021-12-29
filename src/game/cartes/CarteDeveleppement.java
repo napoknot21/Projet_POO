@@ -1,3 +1,5 @@
+package game.cartes;
+
 import java.awt.*;
 
 public class CarteDeveleppement extends Carte {
@@ -34,7 +36,5 @@ public class CarteDeveleppement extends Carte {
     public String getCarteType () {
         return this.carteType;
     }
-
-
 
 }
