@@ -1,6 +1,9 @@
 package ig;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.io.*;
 
 public class WelcomeWindow extends JFrame {
 
@@ -12,6 +15,7 @@ public class WelcomeWindow extends JFrame {
         background.setBounds(0,0,1920,1080);
         this.add(background);
         this.setVisible(true);
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 

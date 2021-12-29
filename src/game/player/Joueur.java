@@ -10,16 +10,14 @@ public class Joueur {
 
     private final String name;
     private final Color color;
-
     private HashMap<CarteResource,Integer> resources;
     private HashMap<CarteDeveleppement, Integer> cartesDeveloppement;
-
     private int nbColonie = 2;
     private int nbRoutes = 2;
     private int nbVilles = 0;
-
     private int pointsVictoire = 2;
-
+    private boolean laPlusLongueArmee;
+    private boolean lePlusLongueChemin;
     private boolean[] ports = {false, false, false, false, false, false};
     /*
     Couleurs possibles:
