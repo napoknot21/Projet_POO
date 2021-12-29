@@ -1,19 +1,19 @@
 public abstract class Carte {
 
-    private String titre;
-    private final String carteType;
-    private String description;
+    private final String titre;
+    private final String description;
 
-    public Carte (String titre, String carteType, String description) {
+    public Carte (String titre, String description) {
         this.titre = titre;
-        this.carteType = carteType;
         this.description = description;
     }
 
-
-    public String getCarteType() {
-        return this.carteType;
+    public String getTitre () {
+        return this.titre;
     }
 
+    public String getDescription () {
+        return this.description;
+    }
 
 }
