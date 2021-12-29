@@ -1,3 +1,5 @@
+package game.cartes;
+
 public abstract class Carte {
 
     private final String titre;
