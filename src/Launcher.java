@@ -1,4 +1,4 @@
-import ig.WelcomeWindow;
+import ig.Game;
 
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class Launcher {
                 rep = sc.nextLine();
                 if (rep.equals("ig") || rep.equals("interface graphique")) {
                     System.out.println("D'accord!");
-                    WelcomeWindow ww = new WelcomeWindow();
+                    Game g = new Game();
                 } else if (rep.equals("t") || rep.equals("terminal")) {
                     System.out.println("D'accord!");
                     System.out.println("Désolé :( cette option est encore en construction");
