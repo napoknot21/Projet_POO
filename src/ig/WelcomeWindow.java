@@ -7,6 +7,8 @@ import java.io.*;
 
 public class WelcomeWindow extends JFrame {
 
+    private Canvas canvas;
+
     public WelcomeWindow() {
         this.setSize(1920,1080);
         this.setTitle("Les Colons de Catan!");
@@ -16,12 +18,8 @@ public class WelcomeWindow extends JFrame {
         this.add(background);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.setResizable(false); //Pour l'instant
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    public static void main (String[] args) {
-        WelcomeWindow w = new WelcomeWindow();
-    }
-    
-    
 }
