@@ -4,8 +4,13 @@ import java.util.Scanner;
 
 public class Launcher {
 
-    public static void main (String[] args) {
+    public Launcher() {
+        Game g = new Game();
+    }
 
+    public static void main (String[] args) {
+        new Launcher();
+        /*
         Scanner sc = new Scanner(System.in);
         System.out.println("Vous voulez jouer au Colon de Catan? [oui/non] ");
         String rep = sc.nextLine();
@@ -31,7 +36,7 @@ public class Launcher {
                 state = false;
             }
         }
-
+*/
     }
 
 }
