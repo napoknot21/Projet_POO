@@ -16,12 +16,13 @@ public class WelcomePanel extends JPanel implements Runnable {
 
     public WelcomePanel () {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Pour avoir la taille de l'écran
-        this.width = dim.width;
-        this.height = dim.height;
-        this.setSize(this.width/2,this.height/2);
+        this.width = dim.width/2;
+        this.height = dim.height/2;
+        this.setSize(1920/2,1080/2);//this.width,this.height);
         this.setFocusable(true);
         this.requestFocus();
-        //this.setVisible(true);
+        this.setVisible(true);
+        //this.run();
     }
 
     public void addNotification () {
@@ -34,7 +35,7 @@ public class WelcomePanel extends JPanel implements Runnable {
 
     public void init() {
         this.setRunning(true);
-        this.img = new BufferedImage(this.width,this.height,BufferedImage.TYPE_INT_ARGB);
+        this.img = new BufferedImage(1920,1080/*this.width,this.height*/,BufferedImage.TYPE_INT_ARGB);
         this.g = (Graphics2D) this.img.getGraphics();
     }
 

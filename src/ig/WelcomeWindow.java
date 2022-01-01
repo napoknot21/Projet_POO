@@ -1,31 +1,43 @@
 package ig;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class WelcomeWindow extends JFrame {
 
-    //private Canvas canvas;
+    private JPanel content;
+    private JLabel background;
+    private Dimension dim;
 
     public WelcomeWindow() {
 
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize((dim.width),(dim.height));
-        //this.setSize(1920,1080);
-        /*
-        ImageIcon fond = new ImageIcon("./images/catan_intro_2.jpg");
-        JLabel background = new JLabel("",fond,JLabel.CENTER);
-        background.setBounds(0,0,dim.width / 2, dim.height / 2);
-        this.add(background);
-
-         */
         this.setTitle("Les Colons de Catan!");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setContentPane(new WelcomePanel());
-        //this.setBackground(new Color(255,0,0));
-        //this.pack();
+
+        this.dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize((dim.width),(dim.height));
+        //this.setSize(1920,1080);
+
+        this.content = (JPanel) this.getContentPane();
+
+        ImageIcon fond = new ImageIcon("./images/catan_intro_2.jpg");
+        this.background = new JLabel("",fond,JLabel.CENTER);
+        this.background.setBounds(0,0,dim.width, dim.height);
+
+        this.content.add(background);
+
+        JPanel boutons = new JPanel();
+
+        boutons.add(new UIButton("Jouer"));
+        boutons.add(new UIButton("Instructions"));
+        boutons.add(new UIButton("sortir"));
+
+        this.content.add(boutons);
         this.setLocationRelativeTo(null);
-        this.setResizable(false); //Pour l'instant
         this.setVisible(true);
+
     }
+
+
 
 }

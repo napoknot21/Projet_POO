@@ -1,4 +1,5 @@
 import ig.Game;
+import ig.GameLoop;
 
 import java.util.Scanner;
 
@@ -9,7 +10,10 @@ public class Launcher {
     }
 
     public static void main (String[] args) {
+
         new Launcher();
+         //new Thread(new GameLoop(new Game())).start();
+         //new Launcher();
         /*
         Scanner sc = new Scanner(System.in);
         System.out.println("Vous voulez jouer au Colon de Catan? [oui/non] ");
