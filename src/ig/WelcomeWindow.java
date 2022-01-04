@@ -1,43 +1,70 @@
 package ig;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
-import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class WelcomeWindow extends JFrame {
 
-    private JPanel content;
     private JLabel background;
-    private Dimension dim;
+    private InstructionsWndow iw;
+    private ImageIcon fond;
 
     public WelcomeWindow() {
 
+        this.fond = new ImageIcon("./images/catan_intro_3.jpg");
+
+        //On initialise les valeurs de base de la fenêtre
         this.setTitle("Les Colons de Catan!");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setSize(this.fond.getIconWidth(),this.fond.getIconHeight());
 
-        this.dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize((dim.width),(dim.height));
-        //this.setSize(1920,1080);
+        //L'arrière-plan avec une image
+        this.background = new JLabel(this.fond);
+        this.background = new JLabel("Hola",fond,JLabel.CENTER);
+        this.background.setBounds(0,0,fond.getIconWidth(), fond.getIconHeight());
+        this.add(this.background);
 
-        this.content = (JPanel) this.getContentPane();
+        //On crée un JPanel pour y mettre les boutons
+        JPanel allButtoms = new JPanel();
+        allButtoms.setLayout(null/*new FlowLayout(FlowLayout.CENTER)*/);
+        this.add(allButtoms,BorderLayout.CENTER);
 
-        ImageIcon fond = new ImageIcon("./images/catan_intro_2.jpg");
-        this.background = new JLabel("",fond,JLabel.CENTER);
-        this.background.setBounds(0,0,dim.width, dim.height);
+        //On initialise les "valeurs" des boutons
+        this.iw = new InstructionsWndow();
 
-        this.content.add(background);
 
-        JPanel boutons = new JPanel();
+        JPanel bouton1 = new JPanel();
+        JPanel bouton2 = new JPanel();
+        JPanel bouton3 = new JPanel();
 
-        boutons.add(new UIButton("Jouer"));
-        boutons.add(new UIButton("Instructions"));
-        boutons.add(new UIButton("sortir"));
 
-        this.content.add(boutons);
+        JButton jouer = new UIButton("Jouer");
+
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        JButton instru = new UIButton("Comment jouer?");
+        instru.addActionListener(event -> this.iw.setStatus(true));
+        JButton exit = new UIButton("Sortir");
+        exit.addActionListener(event-> System.exit(0));
+
+
+        bouton2.add(jouer, BorderLayout.CENTER);
+        bouton2.add(instru,BorderLayout.CENTER);
+        bouton2.add(exit,BorderLayout.CENTER);
+
+        this.add(/*jouer*/bouton1,BorderLayout.NORTH);
+        this.add(/*instruµ*/bouton2,BorderLayout.CENTER);
+        this.add(/*exit*/bouton3,BorderLayout.SOUTH);
+
+        this.setResizable(true);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
     }
-
 
 
 }

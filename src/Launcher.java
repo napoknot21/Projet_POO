@@ -1,5 +1,6 @@
 import ig.Game;
 import ig.GameLoop;
+import ig.WelcomeWindow;
 
 import java.util.Scanner;
 
@@ -10,8 +11,8 @@ public class Launcher {
     }
 
     public static void main (String[] args) {
-
         new Launcher();
+        //new Launcher();
          //new Thread(new GameLoop(new Game())).start();
          //new Launcher();
         /*
