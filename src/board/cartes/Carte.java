@@ -1,4 +1,4 @@
-package game.cartes;
+package board.cartes;
 
 public abstract class Carte {
 
@@ -10,10 +10,7 @@ public abstract class Carte {
         this.description = description;
     }
 
-    public String getTitre () {
-        return this.titre;
-    }
-
+    public String getTitre () { return this.titre; }
     public String getDescription () {
         return this.description;
     }
