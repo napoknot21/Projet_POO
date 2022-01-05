@@ -1,7 +1,7 @@
 package board.pieces;
 
 import board.VertexLocation;
-import game.player.Joueur;
+import game.Joueur;
 
 public abstract class Structure {
 
