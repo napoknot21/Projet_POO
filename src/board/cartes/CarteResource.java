@@ -1,4 +1,4 @@
-package game.cartes;
+package board.cartes;
 
 public class CarteResource extends Carte {
 
@@ -12,5 +12,8 @@ public class CarteResource extends Carte {
     public String getCarteType () {
         return this.carteType;
     }
+
+    public String getTitre () { return "Carte Resource - " + this.carteType; }
+    public String getDescription () { return "Carte Resource - " + this.carteType; }
 
 }

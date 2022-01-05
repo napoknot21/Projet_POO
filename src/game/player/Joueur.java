@@ -1,8 +1,6 @@
 package game.player;
 
-import game.cartes.CarteDeveleppement;
-import game.cartes.CarteResource;
-
+import board.cartes.*;
 import java.util.HashMap;
 import java.awt.*;
 
@@ -31,7 +29,7 @@ public class Joueur {
         this.name = name;
         this.color = color;
 
-        this.resources = new HashMap<>();
+       this.resources = new HashMap<>();
         this.resources.put(new CarteResource("Blé"),0);
         this.resources.put(new CarteResource("Mouton"),0);
         this.resources.put(new CarteResource("Pierre"),0);
@@ -49,6 +47,7 @@ public class Joueur {
         CarteDeveleppement Invention = new CarteDeveleppement("Invention","Description en cours",new Color(0,255,0),"Progress",0);
         CarteDeveleppement ConstructionDeRoutes = new CarteDeveleppement("Construction de Routes","Description en cours",new Color(0,255,0),"Progress",0);
 
+        /*
         this.cartesDeveloppement.put(Chevalier,0);
         this.cartesDeveloppement.put(Biblioteque,0);
         this.cartesDeveloppement.put(PlaceDuMarche,0);
@@ -59,10 +58,25 @@ public class Joueur {
         this.cartesDeveloppement.put(Invention,0);
         this.cartesDeveloppement.put(ConstructionDeRoutes,0);
 
+         */
     }
 
     public String getColor () { return this.color.toString(); }
     public String getName () { return this.name; }
+
+    public int getNombreResources (String type) {
+        if (type == null || type.equals("DESSERT")) {
+            return 0;
+        }
+        return this.resources.get(type);
+    }
+
+    public void setNombreResources (String type, int n) {
+        //this.resources.put(type,n);
+    }
+
+
+
     public boolean winner () { return (this.pointsVictoire >= 10); }
 
 }

@@ -1,4 +1,4 @@
-package game.cartes;
+package board.cartes;
 
 import java.awt.*;
 
@@ -7,6 +7,7 @@ public class CarteDeveleppement extends Carte {
     private final Color color;
     private final String carteType;
     private final int pointVictoire;
+
     /*
     On peut avoir les couleurs suivantes:
     -> Magenta : Knight
@@ -21,20 +22,22 @@ public class CarteDeveleppement extends Carte {
     -> VictoryPoint: Augment le nb de points de victoire
      */
 
-
-    public CarteDeveleppement (String titre, String description, Color color, String carteType, int pointVictoire) {
+    public CarteDeveleppement (String titre, String description, Color couleur, String carteType, int pointVictoire) {
         super(titre,description);
         this.carteType = carteType;
-        this.color = color;
+        this.color = couleur;
         this.pointVictoire = pointVictoire;
     }
 
-    public Color getColor () {
-        return this.color;
+    public CarteDeveleppement (String titre, String description, Color couleur, String carteType) {
+        this(titre,description,couleur,carteType,0);
     }
 
-    public String getCarteType () {
-        return this.carteType;
-    }
+    public Color getColor () { return this.color; }
+    public String getCarteType () { return this.carteType; }
+    public int getPointVictoire () { return this.pointVictoire; }
+
+
+
 
 }
