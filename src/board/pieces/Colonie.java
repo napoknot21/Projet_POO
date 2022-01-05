@@ -1,6 +1,7 @@
 package board.pieces;
 
 import board.VertexLocation;
+import board.cartes.CarteResource;
 
 public class Colonie extends Structure {
 
@@ -13,7 +14,9 @@ public class Colonie extends Structure {
         super.getJoueur().setNombreResources(type,super.getJoueur().getNombreResources(type)+1);
     }
 
-
+    public void donnerResources (CarteResource carte) {
+        super.getJoueur().setNombreResources(carte,super.getJoueur().getNombreResources(carte)+1);
+    }
 
 
 }
