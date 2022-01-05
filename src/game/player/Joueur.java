@@ -47,7 +47,7 @@ public class Joueur {
         CarteDeveleppement Invention = new CarteDeveleppement("Invention","Description en cours",new Color(0,255,0),"Progress",0);
         CarteDeveleppement ConstructionDeRoutes = new CarteDeveleppement("Construction de Routes","Description en cours",new Color(0,255,0),"Progress",0);
 
-        /*
+
         this.cartesDeveloppement.put(Chevalier,0);
         this.cartesDeveloppement.put(Biblioteque,0);
         this.cartesDeveloppement.put(PlaceDuMarche,0);
@@ -58,21 +58,41 @@ public class Joueur {
         this.cartesDeveloppement.put(Invention,0);
         this.cartesDeveloppement.put(ConstructionDeRoutes,0);
 
-         */
+
     }
 
     public String getColor () { return this.color.toString(); }
     public String getName () { return this.name; }
+    public int getNbColonie() { return this.nbColonie; }
+    public int getNbRoutes() { return this.nbRoutes; }
+    public int getNbVilles () { return this.nbVilles; }
+    public int getPointsVictoire() { return this.pointsVictoire; }
 
     public int getNombreResources (String type) {
         if (type == null || type.equals("DESSERT")) {
             return 0;
         }
-        return this.resources.get(type);
+        return this.resources.get(new CarteResource(type));
+    }
+
+    public int getNombreResources (CarteResource carte) {
+        if (carte == null || carte.getCarteType().equals("DESSERT")) {
+            return 0;
+        }
+        return this.resources.get(carte);
     }
 
     public void setNombreResources (String type, int n) {
-        //this.resources.put(type,n);
+        CarteResource tmp = new CarteResource(type);
+        if (type != null && this.resources.containsValue(tmp) && n >= 0) {
+            this.resources.put(tmp,n);
+        }
+    }
+
+    public void setNombreResources (CarteResource carte, int n) {
+        if (carte != null && this.resources.containsValue(carte) && n >= 0) {
+            this.resources.put(carte,n);
+        }
     }
 
 
