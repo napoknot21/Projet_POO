@@ -85,15 +85,19 @@ public class Joueur {
         this.pointsVictoire = pointsVictoire;
     }
 
-    //Getters
+    /**************Getters**************/
     public String getColor () { return this.color.toString(); }
     public String getName () { return this.name; }
+    public HashMap<String,Integer> getCartesDeveloppement () { return this.cartesDeveloppement; }
+    public HashMap<String, Integer> getResources() { return resources; }
     public int getNbColonie() { return this.nbColonie; }
     public int getNbRoutes() { return this.nbRoutes; }
     public int getNbVilles () { return this.nbVilles; }
     public int getPointsVictoire() { return this.pointsVictoire; }
     public ArrayList<Chemin> getChemins () { return this.chemins; }
-
+    public ArrayList<CarteResource> getMain () { return this.main; }
+    public boolean isLaPlusLongueArmee () { return this.laPlusLongueArmee; }
+    public boolean[] getPorts () { return this.ports; }
 
     /*Getters et setters exlcusif pour les Colletions (Hashmap et ArrayList)*/
 
@@ -124,7 +128,6 @@ public class Joueur {
             return;
         } else if (type.equals("Blé") || type.equals("Mouton") || type.equals("Pierre") || type.equals("Bois") || type.equals("Argile")) {
             this.resources.put(type,n);
-            for (int i = 0 ; i < n; i++) { this.ajouterCarteMain(type); };
         }
     }
 
@@ -156,22 +159,123 @@ public class Joueur {
          this.main.add(new CarteResource(type));
     }
 
+    public void addChemin (Chemin chemin) {
+         this.chemins.add(chemin);
+    }
 
 
     public void setPointsVictoire (int n) {
         this.pointsVictoire = n;
     }
 
+    public void setLaPlusLongueArmee (boolean b) {
+         if (this.laPlusLongueArmee == true && b == false) {
+             this.pointsVictoire--;
+         } else if (this.laPlusLongueArmee == false && b == true) {
+             this.pointsVictoire++;
+         }
+    }
+
+    public boolean ALesResources (ArrayList<CarteResource> res) {
+         int ble = 0,
+            mouton = 0,
+            pierre = 0,
+            bois = 0,
+            argile = 0;
+         for (CarteResource cr : res) {
+             if (cr.getCarteType().equals("Blé")) {
+                 ble++;
+             } else if (cr.getCarteType().equals("Mouton")) {
+                 mouton++;
+             } else if (cr.getCarteType().equals("Pierre")) {
+                 pierre++;
+             } else if (cr.getCarteType().equals("Bois")) {
+                 bois++;
+             } else if (cr.getCarteType().equals("Argile")) {
+                 argile++;
+             }
+         }
+
+         if (this.getNombreResourcesType("Blé") >= ble && this.getNombreResourcesType("Mouton") >= mouton
+                 && this.getNombreResourcesType("Pierre") >= pierre && this.getNombreResourcesType("Bois") >= bois
+                 && this.getNombreResourcesType("Argile") >= argile
+            ) {
+             return true;
+         }
+         return false;
+    }
+
+    public boolean avoirLaCarteMain (String type) {
+         for (CarteResource cr : this.main) {
+             if (cr.getCarteType().equals(type)) {
+                 return true;
+             }
+         }
+         return false;
+    }
+
+    public void removeCarteMain (String type) {
+        for (CarteResource cr : this.main) {
+            if (cr.getCarteType().equals(type)) {
+                this.main.remove(cr);
+                return;
+            }
+        }
+    }
+
+    public void addPort (int portTag) {
+         this.ports[portTag] = true;
+    }
+
+    public String toString () {
+         return name;
+    }
+
+    public void addColonie () { this.nbColonie++;}
+
+    public void upVille () {
+         this.nbColonie--;
+         this.nbVilles++;
+    }
+
+    public void addCheminsComptes () {
+         this.nbRoutes++;
+    }
+
+    public void removeResource (ArrayList<CarteResource> resources) {
+         if (resources.isEmpty()) return;
+         for (CarteResource cr : resources) {
+             this.setNombreResourcesType(cr.getCarteType(),this.getNombreResourcesType(cr.getCarteType())-1);
+         }
+    }
+
+    public void addResources (ArrayList<CarteResource> resources) {
+         if (resources.isEmpty()) return;
+        for (CarteResource cr : resources){
+            this.setNombreResourcesType(cr.getCarteType(),this.getNombreResourcesType(cr.getCarteType())+1);
+        }
+    }
+
+    public int getTotalNumberOfResources () {
+         return this.getNombreResourcesType("Blé") +
+                 this.getNombreResourcesType("Moutons") +
+                 this.getNombreResourcesType("Bois") +
+                 this.getNombreResourcesType("Argile") +
+                 this.getNombreResourcesType("Pierre");
+    }
+
+    public int getNombreDeCarteMainType (String type) {
+         int nb = 0;
+         for (CarteResource cr : this.main) {
+             if (cr.getCarteType().equals(type)) {
+                 nb++;
+             }
+         }
+         return nb;
+    }
 
     public boolean winner () { return (this.pointsVictoire >= 10); }
 
-    public static void main (String[] args) {
-        Joueur player = new Joueur("Charly",Color.BLUE);
-        System.out.println(player.getNombreChevaliers());
-        player.ajouterUnSeulChevalier();
-        System.out.println(player.getNombreChevaliers());
-
-    }
 
 
 }
