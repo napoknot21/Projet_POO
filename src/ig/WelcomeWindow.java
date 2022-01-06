@@ -15,7 +15,7 @@ public class WelcomeWindow extends JFrame {
 
     public WelcomeWindow() {
 
-        this.fond = new ImageIcon("./images/catan_intro_3.jpg");
+        this.fond = new ImageIcon("./images/catan_intro_2.jpg");
 
         //On initialise les valeurs de base de la fenêtre
         this.setTitle("Les Colons de Catan!");
