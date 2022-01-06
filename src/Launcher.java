@@ -1,8 +1,4 @@
-import ig.Game;
-import ig.GameLoop;
-import ig.WelcomeWindow;
-
-import java.util.Scanner;
+import game.Game;
 
 public class Launcher {
 
