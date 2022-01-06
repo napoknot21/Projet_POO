@@ -11,12 +11,7 @@ public class Ville extends Structure {
     }
 
     public void donnerResources (String type) {
-        super.getJoueur().setNombreResources(type,super.getJoueur().getNombreResources(type)+2);
+        super.getJoueur().setNombreResourcesType(type,super.getJoueur().getNombreResourcesType(type)+2);
     }
-
-    public void donnerResources (CarteResource carte) {
-        super.getJoueur().setNombreResources(carte,super.getJoueur().getNombreResources(carte)+2);
-    }
-
 
 }

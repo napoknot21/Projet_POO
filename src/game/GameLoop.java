@@ -1,4 +1,6 @@
-package ig;
+package game;
+
+import game.Game;
 
 public class GameLoop implements Runnable {
 

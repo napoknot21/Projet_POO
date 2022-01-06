@@ -1,4 +1,6 @@
-package ig;
+package game;
+
+import ig.WelcomeWindow;
 
 import java.awt.*;
 
