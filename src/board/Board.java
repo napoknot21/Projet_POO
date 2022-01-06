@@ -145,6 +145,17 @@ public class Board {
 
     /***********Getters**********/
     public Structure[][][] getStructures () { return this.structures; }
+    public Chemin getChemin (EdgeLocation location) {
+        return this.chemins[location.getX()][location.getY()][location.getOrientation()];
+    }
+    public Location getVoleurLocation () { return this.voleurLocation; }
+
+    public void setVoleurLocation (Location location) {
+        this.voleurLocation = location;
+    }
+    public Tile getTuile (Location location) {
+        return this.tuiles[location.getX()][location.getY()];
+    }
 
     //La fonction donne les resources aux joueurs avec un "structure" qui est frontiere avec le nombre des dés
     public void distributionResources (int des) {
@@ -264,7 +275,7 @@ public class Board {
                 player.equals(this.chemins[location.getX()][location.getY() - 1][2].getPlayer())) &&
                 (this.structures[location.getX()][location.getY()-1][1].getJoueur() == null &&
                 this.structures[location.getX()+1][location.getY()-1][1].getJoueur() == null &&
-                !(location.getY() - 2 >= 0 && !(this.structures[location.getX()-1][location.getY()-2][1].getJoueur() == null)))) {
+                !(location.getY() - 2 >= 0 && !(this.structures[location.getX()-1][location.getY()-2][0].getJoueur() == null)))) {
 
                 if (this.checkPort(location) != 1) {
                     player.addPort(checkPort(location));
@@ -277,6 +288,104 @@ public class Board {
             }
 
         }
+    }
+
+    //Verifie la position pour assigner le chemin au joueur
+    public boolean placerChemin (EdgeLocation location, Joueur player) {
+        if (this.chemins[location.getX()][location.getY()][location.getOrientation()].getPlayer() != null) { //Le vertex est déjà pris !
+            return false;
+        }
+
+        if (location.getOrientation() == 0) {
+
+            if (player.equals(this.structures[location.getX()][location.getY()+1][1].getJoueur()) ||
+                player.equals(this.structures[location.getX()][location.getY()][0].getJoueur()) ||
+                player.equals(this.chemins[location.getX()-1][location.getY()][1].getPlayer()) ||
+                player.equals(this.chemins[location.getX()-1][location.getY()][2].getPlayer()) ||
+                player.equals(this.chemins[location.getX()][location.getY()+1][2].getPlayer())||
+                player.equals(this.chemins[location.getX()][location.getY()][1].getPlayer())) {
+
+                this.chemins[location.getX()][location.getY()][location.getOrientation()].setPlayer(player);
+                return true;
+            } else {
+                return false;
+            }
+
+
+        } else if (location.getOrientation() == 1) {
+
+            if (player.equals(this.structures[location.getX()][location.getY()][0].getJoueur()) ||
+                player.equals(this.structures[location.getX()+1][location.getY()+1][1].getJoueur()) ||
+                player.equals(this.chemins[location.getX()][location.getY()][0].getPlayer()) ||
+                player.equals(this.chemins[location.getX()][location.getY()+1][2].getPlayer()) ||
+                player.equals(this.chemins[location.getX()][location.getY()][2].getPlayer())||
+                player.equals(this.chemins[location.getX()+1][location.getY()][0].getPlayer())) {
+
+                this.chemins[location.getX()][location.getY()][location.getOrientation()].setPlayer(player);
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            if (player.equals(this.structures[location.getX()][location.getY()-1][0].getJoueur()) ||
+                player.equals(this.structures[location.getX()+1][location.getY()+1][1].getJoueur()) ||
+                player.equals(this.chemins[location.getX()][location.getY()][1].getPlayer()) ||
+                player.equals(this.chemins[location.getX()+1][location.getY()][0].getPlayer()) ||
+                player.equals(this.chemins[location.getX()][location.getY()-1][0].getPlayer())||
+                player.equals(this.chemins[location.getX()][location.getY()-1][1].getPlayer())) {
+
+                this.chemins[location.getX()][location.getY()][location.getOrientation()].setPlayer(player);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    }
+
+    public boolean placeVille (VertexLocation location, Joueur player) {
+        if (player.equals(this.structures[location.getX()][location.getY()][location.getOrientation()].getJoueur()) &&
+            this.structures[location.getX()][location.getY()][location.getOrientation()].getType() == 0) { //0 si c'est un colonie et 1 si c'est une ville
+            this.structures[location.getX()][location.getY()][location.getOrientation()].setType(1);
+            return true;
+        }
+        return false;
+    }
+
+    //
+    public boolean moveVoleur (Location location) {
+        Location tmp = this.getVoleurLocation();
+        if (tmp.getX() == location.getX() && tmp.getY() == location.getY()) {
+            return false;
+        }
+        this.tuiles[tmp.getX()][tmp.getY()].setVoleur(false);
+        this.setVoleurLocation(tmp);
+        this.tuiles[location.getX()][location.getY()].setVoleur(true);
+        this.setVoleurLocation(location);
+        return true;
+    }
+
+
+    public ArrayList<Joueur> getJoueursAffectesParVoleur () {
+        Location voleurTmp = this.getVoleurLocation();
+        ArrayList<Structure> pieces = new ArrayList<>();
+        ArrayList<Joueur> players = new ArrayList<>();
+        pieces.add(this.structures[voleurTmp.getX()][voleurTmp.getY()][0]);
+        pieces.add(this.structures[voleurTmp.getX()+1][voleurTmp.getY()+1][1]);
+        pieces.add(this.structures[voleurTmp.getX()][voleurTmp.getY()-1][0]);
+        pieces.add(this.structures[voleurTmp.getX()][voleurTmp.getY()][1]);
+        pieces.add(this.structures[voleurTmp.getX()-1][voleurTmp.getY()-1][0]);
+        pieces.add(this.structures[voleurTmp.getX()][voleurTmp.getY()+1][1]);
+
+        for (Structure s : pieces) {
+            if (s.getJoueur() != null) {
+                if (Collections.frequency(players,s.getJoueur())<1) { //On verifie qu'il est pas dans la liste pour l'ajouter
+                    players.add(s.getJoueur());
+                }
+            }
+        }
+        return players;
     }
 
     public int checkPort (VertexLocation location) {
