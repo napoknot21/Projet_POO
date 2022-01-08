@@ -388,6 +388,10 @@ public class Board {
         return players;
     }
 
+    /*
+    CODE PAS FINI
+     */
+
     public int checkPort (VertexLocation location) {
         int x = location.getX();
         int y = location.getY();
