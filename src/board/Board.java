@@ -8,6 +8,7 @@ import game.Joueur;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Stack;
 
 public class Board {
 
@@ -149,13 +150,14 @@ public class Board {
         return this.chemins[location.getX()][location.getY()][location.getOrientation()];
     }
     public Location getVoleurLocation () { return this.voleurLocation; }
-
     public void setVoleurLocation (Location location) {
         this.voleurLocation = location;
     }
     public Tile getTuile (Location location) {
         return this.tuiles[location.getX()][location.getY()];
     }
+    public Tile[][] getTuiles () { return this.tuiles; }
+    public Chemin[][][] getChemins () { return this.chemins; }
 
     //La fonction donne les resources aux joueurs avec un "structure" qui est frontiere avec le nombre des dés
     public void distributionResources (int des) {
@@ -388,8 +390,322 @@ public class Board {
         return players;
     }
 
+    public ArrayList<Tile> getTuilesAdjacentesStructure (VertexLocation location) {
+        ArrayList<Tile> tuiles = new ArrayList<>();
+        if (location.getOrientation() == 0) {
+            Tile a = this.tuiles[location.getX()][location.getY()];
+            if (a.getType() != null) {
+                tuiles.add(a);
+            }
+            Tile b = this.tuiles[location.getX()][location.getY()+1];
+            if (b.getType() != null) {
+                tuiles.add(b);
+            }
+            Tile c = this.tuiles[location.getX()+1][location.getY()+1];
+            if (c.getType() != null) {
+                tuiles.add(c);
+            }
+        } else {
+            Tile a = this.tuiles[location.getX()][location.getY()];
+            if (a.getType() != null) {
+                tuiles.add(a);
+            }
+            Tile b = this.tuiles[location.getX()][location.getY()-1];
+            if (b.getType() != null) {
+                tuiles.add(b);
+            }
+            Tile c = this.tuiles[location.getX()-1][location.getY()-1];
+            if (c.getType() != null) {
+                tuiles.add(c);
+            }
+        }
+        return tuiles;
+    }
+
+    @SuppressWarnings("unchecked")
+    public int trouverLeCheminLePlusLong (Joueur player) {
+        ArrayList<Chemin> cheminsList = (ArrayList<Chemin>) player.getChemins().clone();
+        int maxChemins = 1; //Debut du chemin
+
+        while (cheminsList.size() > 0) {
+            ArrayList<Chemin> cheminsConnectes =  new ArrayList<>();
+            cheminsConnectes.add(cheminsList.remove(0));
+            for (int i = 0; i <= cheminsConnectes.size(); i++) {
+                ArrayList<Chemin> cheminsAdjacents = this.trouverCheminsAdjacents(cheminsConnectes.get(i).getLocation());
+                for (int j = 0; j <= cheminsAdjacents.size(); j++) {
+                    int index = cheminsList.indexOf(cheminsAdjacents.get(j));
+                    if (index >= 0) {
+                        cheminsConnectes.add(cheminsList.remove(index));
+                    }
+                }
+            }
+
+            if (this.endPoint == null) {
+                this.endPoint = cheminsConnectes.get (0);
+                if (this.endPoint.getLocation().getOrientation() == 0 || this.endPoint.getLocation().getOrientation() == 1) {
+                    this.startSide = this.structures[this.endPoint.getLocation().getX()][this.endPoint.getLocation().getY()][0].getLocation();
+                } else {
+                    this.startSide = this.structures[this.endPoint.getLocation().getX()+1][this.endPoint.getLocation().getY()+1][0].getLocation();
+                }
+            }
+
+            Stack<Chemin> s = new Stack<>();
+            Stack<VertexLocation> entreeCotes = new Stack<>();
+            s.push(this.endPoint);
+
+            entreeCotes.push(this.startSide);
+            int count = 1;
+
+            while (!s.empty()) {
+                s.peek().visiter();
+                ArrayList<Chemin> cheminsEnfats = this.trouverCheminsAdjacentsDFS(s.peek(),entreeCotes.peek());
+                for (int i = 0; i < cheminsEnfats.size(); i++) {
+                    if (cheminsEnfats.get(i).estVisite()) {
+                        cheminsEnfats.remove(i);
+                        i--;
+                    }
+                }
+                if (cheminsEnfats.size() <= 0) {
+                    s.pop();
+                    entreeCotes.pop();
+                    if (count >= maxChemins) {
+                        maxChemins = count;
+                        count--;
+                    }
+                } else {
+                    count++;
+                    entreeCotes.push(this.cheminsConnectesAAutre(s.peek(),cheminsEnfats.get(0)));
+                    s.push(cheminsEnfats.get(0));
+                }
+            }
+
+            for (int i = 0; i < cheminsConnectes.size(); i++) {
+                cheminsConnectes.get(i).ResetVisite();
+            }
+
+        }
+
+        this.endPoint = null;
+        this.startSide = null;
+        return maxChemins;
+
+
+    }
+
+
+    private ArrayList<Chemin> trouverCheminsAdjacents (EdgeLocation location) {
+        Chemin ch = this.chemins[location.getX()][location.getY()][0];
+        ArrayList<Chemin> result = new ArrayList<>();
+        Joueur player = ch.getPlayer();
+        int x = location.getX();
+        int y = location.getY();
+        int o = location.getOrientation();
+
+        if (o == 0) {
+            if (player.equals(this.structures[x][y + 1][1].getJoueur()) || this.structures[x][y + 1][1].getJoueur() == null) {
+
+                if (!player.equals(this.chemins[x - 1][y][1].getPlayer()) && !player.equals(this.chemins[x - 1][y][2].getPlayer())) {
+                    this.startSide = this.structures[x][y + 1][1].getLocation();
+                    this.endPoint = ch;
+                } else {
+                    if (player.equals(this.chemins[x - 1][y][1].getPlayer())) {
+                        result.add(this.chemins[x - 1][y][1]);
+                    }
+                    if (player.equals(this.chemins[x - 1][y][2].getPlayer())) {
+                        result.add(this.chemins[x - 1][y][2]);
+                    }
+                }
+            }
+            if (player.equals(this.structures[x][y][0].getJoueur()) || this.structures[x][y][0].getJoueur() == null) {
+                if (!player.equals(this.chemins[x][y + 1][2].getPlayer()) && !player.equals(this.chemins[x][y][1].getPlayer())) {
+                    this.startSide = this.structures[x][y][0].getLocation();
+                    this.endPoint = ch;
+                } else {
+                    if (player.equals(this.chemins[x][y + 1][2].getPlayer())) {
+                        result.add(this.chemins[x][y + 1][2]);
+                    }
+                    if (player.equals(this.chemins[x][y][1].getPlayer())) {
+                        result.add(this.chemins[x][y][1]);
+                    }
+                }
+            }
+        } else if (o == 1) {
+
+            if (player.equals(this.structures[x+1][y+1][1].getJoueur()) || this.structures[x+1][y+1][1].getJoueur() == null) {
+                if (!player.equals(this.chemins[x+1][y][0].getPlayer()) && !player.equals(this.chemins[x][y][2].getPlayer())) {
+                    this.startSide = this.structures[x+1][y+1][1].getLocation();
+                    this.endPoint = ch;
+                } else {
+                    if (player.equals(this.chemins[x+1][y][0].getPlayer())) {
+                        result.add(this.chemins[x+1][y][0]);
+                    }
+                    if (player.equals(this.chemins[x][y][2].getPlayer())) {
+                        result.add(this.chemins[x][y][2]);
+                    }
+                }
+            }
+
+            if (player.equals(this.structures[x][y][0].getJoueur()) || this.structures[x][y][0].getJoueur() == null) {
+                if (!player.equals(this.chemins[x][y + 1][2].getPlayer()) && !player.equals(this.chemins[x][y][0].getPlayer())) {
+                    this.startSide = this.structures[x][y][0].getLocation();
+                    this.endPoint = ch;
+                } else {
+                    if (player.equals(this.chemins[x][y + 1][2].getPlayer())) {
+                        result.add(this.chemins[x][y + 1][2]);
+                    }
+                    if (player.equals(this.chemins[x][y][0].getPlayer())) {
+                        result.add(this.chemins[x][y][0]);
+                    }
+                }
+            }
+
+        } else {
+
+            if (player.equals(this.structures[x+1][y+1][1].getJoueur()) || this.structures[x+1][y+1][1].getJoueur() == null) {
+                if (!player.equals(this.chemins[x+1][y][0].getPlayer()) && !player.equals(this.chemins[x][y][1].getPlayer())) {
+                    this.startSide = this.structures[x+1][y+1][1].getLocation();
+                    this.endPoint = ch;
+                } else {
+                    if (player.equals(this.chemins[x+1][y][0].getPlayer())) {
+                        result.add(this.chemins[x+1][y][0]);
+                    }
+                    if (player.equals(this.chemins[x][y][1].getPlayer())) {
+                        result.add(this.chemins[x][y][1]);
+                    }
+                }
+            }
+
+            if (player.equals(this.structures[x][y-1][0].getJoueur()) || this.structures[x][y-1][0].getJoueur() == null) {
+                if (!player.equals(this.chemins[x][y - 1][1].getPlayer()) && !player.equals(this.chemins[x][y-1][0].getPlayer())) {
+                    this.startSide = this.structures[x][y-1][0].getLocation();
+                    this.endPoint = ch;
+                } else {
+                    if (player.equals(this.chemins[x][y - 1][1].getPlayer())) {
+                        result.add(this.chemins[x][y - 1][1]);
+                    }
+                    if (player.equals(this.chemins[x][y-1][0].getPlayer())) {
+                        result.add(this.chemins[x][y-1][0]);
+                    }
+                }
+            }
+
+        }
+        return result;
+    }
+
+
+    public ArrayList<Chemin> trouverCheminsAdjacentsDFS (Chemin route, VertexLocation entreeCote) {
+        ArrayList<Chemin> check = new ArrayList<>();
+        Structure s = this.structures[entreeCote.getX()][entreeCote.getY()][entreeCote.getOrientation()];
+        Joueur p = route.getPlayer();
+        int x = route.getLocation().getX();
+        int y = route.getLocation().getY();
+        int o = route.getLocation().getOrientation();
+
+        if (o == 0) {
+
+            if (entreeCote.getOrientation() == 0 && (p.equals(s.getJoueur())) || s.getJoueur() == null) {
+                check.add(this.chemins[x-1][y][2]);
+                check.add(this.chemins[x-1][y][1]);
+            } else if (p.equals(s.getJoueur()) || s.getJoueur() == null) {
+                check.add(this.chemins[x][y][1]);
+                check.add(this.chemins[x][y+1][2]);
+            }
+
+        } else if (o == 1) {
+
+            if (entreeCote.getOrientation() == 0 && (p.equals(s.getJoueur()) || s.getJoueur() == null)) {
+                check.add(this.chemins[x][y][2]);
+                check.add(this.chemins[x+1][y][0]);
+            } else if (p.equals(s.getJoueur()) || s.getJoueur() == null) {
+                check.add(this.chemins[x][y][0]);
+                check.add(this.chemins[x][y+1][2]);
+            }
+
+        } else if (o == 2) {
+
+            if (entreeCote.getOrientation() == 0 && (p.equals(s.getJoueur()) || s.getJoueur() == null)) {
+                check.add(this.chemins[x+1][y][0]);
+                check.add(this.chemins[x][y][1]);
+            } else if (p.equals(s.getJoueur()) || s.getJoueur() == null) {
+                check.add(this.chemins[x][y-1][1]);
+                check.add(this.chemins[x][y-1][0]);
+            }
+
+        }
+
+        for (int i = 0; i < check.size(); i++) {
+            if (p.equals(check.get(i).getPlayer()));
+            else {
+                check.remove(i);
+                i--;
+            }
+        }
+        return check;
+    }
+
+    public VertexLocation cheminsConnectesAAutre (Chemin ch, Chemin autre ) {
+        int ch_x = ch.getLocation().getX();
+        int ch_y = ch.getLocation().getY();
+        int ch_o = ch.getLocation().getOrientation();
+
+        int autre_x = autre.getLocation().getX();
+        int autre_y = autre.getLocation().getY();
+        int autre_o = autre.getLocation().getOrientation();
+
+        if (ch_o == 0) {
+            if (autre_o == 1) {
+                if (ch_x == autre_x) {
+                    return this.structures[ch_x][ch_y][0].getLocation();
+                } else {
+                    return this.structures[ch_x][ch_y+1][1].getLocation();
+                }
+            } else {
+                if (ch_y + 1 == autre_y) {
+                    return this.structures[ch_x][ch_y][0].getLocation();
+                } else {
+                    return this.structures[ch_x][ch_y+1][1].getLocation();
+                }
+            }
+        } else if (ch_o == 1) {
+            if (autre_o == 0) {
+                if (ch_x == autre_x) {
+                    return this.structures[ch_x][ch_y][0].getLocation();
+                } else {
+                    return this.structures[ch_x-1][ch_y+1][1].getLocation();
+                }
+            } else {
+                if (ch_y + 1 == autre_y) {
+                    return this.structures[ch_x][ch_y][0].getLocation();
+                } else {
+                    return this.structures[ch_x-1][ch_y][1].getLocation();
+                }
+            }
+        } else {
+            if (autre_o == 0) {
+                if (ch_x == autre_x) {
+                    return this.structures[ch_x][ch_y-1][0].getLocation();
+                } else {
+                    return this.structures[ch_x+1][ch_y+1][1].getLocation();
+                }
+            } else {
+                if (ch_y == autre_y) {
+                    return this.structures[ch_x+1][ch_y+1][1].getLocation();
+                } else {
+                    return this.structures[ch_x][ch_y-1][0].getLocation();
+                }
+            }
+        }
+    }
+
     /*
-    CODE PAS FINI
+    int portTag if port, -1 if not
+	 *  			  0 = general
+					  1 = Argile
+					  2 = Mouton
+					  3 = Pierre
+					  4 = Blé
+					  5 = Bois
      */
 
     public int checkPort (VertexLocation location) {
@@ -420,7 +736,5 @@ public class Board {
             return -1;
         }
     }
-
-
 
 }
