@@ -25,7 +25,7 @@ public class Chemin {
     public EdgeLocation getLocation () { return this.location; }
     public boolean estVisite () { return this.visite;}
 
-    public void ResestVisite () {
+    public void ResetVisite () {
         this.visite = false;
     }
 
