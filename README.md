@@ -12,7 +12,7 @@ D'abord on télécharge ```.deb``` package.
 $ wget https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.deb
 ```
 Et enfin, on fait marcher cette commande
-```aidl
+```
 $ sudo dpkg -i jdk-17_linux-x64_bin.deb
 ```
 
@@ -27,7 +27,7 @@ On le change de répértoire vers src :
 $ cd src
 ```
 Et enfin, on compile et on le lance avec les commandes:
-```aidl
+```
 $ javac Launcher.java
 $ java Launcher
 ```
