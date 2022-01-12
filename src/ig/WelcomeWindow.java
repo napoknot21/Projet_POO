@@ -13,6 +13,7 @@ public class WelcomeWindow extends JFrame {
     private InstructionsWndow iw;
     private ConfigurationWindow cw;
     private ImageIcon fond;
+    public boolean status = true;
 
     public WelcomeWindow() {
 
@@ -24,7 +25,7 @@ public class WelcomeWindow extends JFrame {
         this.setSize(this.fond.getIconWidth(),this.fond.getIconHeight());
 
         //L'arrière-plan avec une image
-        this.background = new JLabel(this.fond);
+        //this.background = new JLabel(this.fond);
         this.background = new JLabel("",fond,JLabel.CENTER);
         this.background.setBounds(0,0,fond.getIconWidth(), fond.getIconHeight());
         this.add(this.background);
@@ -36,7 +37,7 @@ public class WelcomeWindow extends JFrame {
 
         //On initialise les "valeurs" des boutons
         this.iw = new InstructionsWndow();
-        this.cw = new ConfigurationWindow();
+        this.cw = new ConfigurationWindow(this);
 
         JPanel bouton1 = new JPanel();
         JPanel bouton2 = new JPanel();
@@ -63,9 +64,11 @@ public class WelcomeWindow extends JFrame {
 
         this.setResizable(true);
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
+        this.setVisible(status);
 
     }
+
+    public void setStatus (boolean status) { this.status = status; }
 
 
 }
