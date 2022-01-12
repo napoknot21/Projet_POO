@@ -1,6 +1,7 @@
 package game;
 
 import board.Board;
+import board.cartes.Paquet;
 import ig.WelcomeWindow;
 
 import java.awt.*;
@@ -11,6 +12,7 @@ public class Game {
 
     private Board board;
     private ArrayList<Joueur> players;
+    private Paquet paquet;
     private WelcomeWindow ww;
 
     public Game (/*ArrayList<Joueur> tousLesJoueurs*/) {

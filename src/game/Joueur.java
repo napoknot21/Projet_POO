@@ -49,18 +49,6 @@ public class Joueur {
         this.resources.put("Bois",0);
         this.resources.put("Argile",0);
 
-        /*
-        CarteDeveleppement Chevalier = new CarteDeveleppement("Chevalier","Déplacez le pion voleur...",new Color(255,0,255),"Knight",0);
-        CarteDeveleppement Biblioteque = new CarteDeveleppement("Bibliothèque","1 point de Victoire",new Color(255,255,0),"VictoryPoint",1);
-        CarteDeveleppement PlaceDuMarche = new CarteDeveleppement("Place du Marché","1 point de Victoire", new Color(255,255,0),"VictoryPoint",1);
-        CarteDeveleppement Parlement = new CarteDeveleppement("Parlement","1 point de Victoire",new Color(255,255,0),"VictoryPoint",1);
-        CarteDeveleppement Eglise = new CarteDeveleppement("Eglise","1 point de Victoire",new Color(255,255,0),"VictoryPoint",1);
-        CarteDeveleppement Universite = new CarteDeveleppement("Université","1 point de Victoire",new Color(255,255,0),"VictoryPoint",1);
-        CarteDeveleppement Monopoly = new CarteDeveleppement("Monopoly","description en cours",new Color(0,255,0),"Progress",0);
-        CarteDeveleppement Invention = new CarteDeveleppement("Invention","Description en cours",new Color(0,255,0),"Progress",0);
-        CarteDeveleppement ConstructionDeRoutes = new CarteDeveleppement("Construction de Routes","Description en cours",new Color(0,255,0),"Progress",0);
-         */
-
         this.cartesDeveloppement = new HashMap<>(9);
         this.cartesDeveloppement.put("Chevalier",0);
         this.cartesDeveloppement.put("Biblioteque",0);

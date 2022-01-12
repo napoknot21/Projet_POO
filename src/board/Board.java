@@ -245,6 +245,7 @@ public class Board {
 
     }
 
+    //Pour placer une vile ou une colonie
     public boolean placerStructure (VertexLocation location, Joueur player) {
         if (this.structures[location.getX()][location.getY()][location.getOrientation()] != null) { //Vertex est deja occupé
             return false;
@@ -346,6 +347,7 @@ public class Board {
 
     }
 
+    //On place une ville en donnant une localisation)
     public boolean placeVille (VertexLocation location, Joueur player) {
         if (player.equals(this.structures[location.getX()][location.getY()][location.getOrientation()].getJoueur()) &&
             this.structures[location.getX()][location.getY()][location.getOrientation()].getType() == 0) { //0 si c'est un colonie et 1 si c'est une ville
@@ -355,7 +357,7 @@ public class Board {
         return false;
     }
 
-    //
+    //ON fait bouger le voleur de tuile
     public boolean moveVoleur (Location location) {
         Location tmp = this.getVoleurLocation();
         if (tmp.getX() == location.getX() && tmp.getY() == location.getY()) {
@@ -369,6 +371,7 @@ public class Board {
     }
 
 
+    //Renvoie une liste contenant les jouers affectés par le voleur
     public ArrayList<Joueur> getJoueursAffectesParVoleur () {
         Location voleurTmp = this.getVoleurLocation();
         ArrayList<Structure> pieces = new ArrayList<>();
@@ -382,7 +385,7 @@ public class Board {
 
         for (Structure s : pieces) {
             if (s.getJoueur() != null) {
-                if (Collections.frequency(players,s.getJoueur())<1) { //On verifie qu'il est pas dans la liste pour l'ajouter
+                if (Collections.frequency(players,s.getJoueur())<1) { //On vérifie qu'il n'est pas dans la liste pour l'ajouter
                     players.add(s.getJoueur());
                 }
             }
@@ -422,7 +425,8 @@ public class Board {
         return tuiles;
     }
 
-    @SuppressWarnings("unchecked")
+    //On va chercher le chemin le plus long
+    @SuppressWarnings("unchecked") //Pour enlever le warning
     public int trouverLeCheminLePlusLong (Joueur player) {
         ArrayList<Chemin> cheminsList = (ArrayList<Chemin>) player.getChemins().clone();
         int maxChemins = 1; //Debut du chemin
@@ -484,15 +488,12 @@ public class Board {
             }
 
         }
-
         this.endPoint = null;
         this.startSide = null;
         return maxChemins;
-
-
     }
 
-
+    //retourne les chemins adjacente à une location (côté d'une tuile) donnée en parametre
     private ArrayList<Chemin> trouverCheminsAdjacents (EdgeLocation location) {
         Chemin ch = this.chemins[location.getX()][location.getY()][0];
         ArrayList<Chemin> result = new ArrayList<>();
@@ -593,7 +594,7 @@ public class Board {
         return result;
     }
 
-
+    //Retourne une liste des chemins sortant d'un vertice
     public ArrayList<Chemin> trouverCheminsAdjacentsDFS (Chemin route, VertexLocation entreeCote) {
         ArrayList<Chemin> check = new ArrayList<>();
         Structure s = this.structures[entreeCote.getX()][entreeCote.getY()][entreeCote.getOrientation()];
@@ -644,6 +645,7 @@ public class Board {
         return check;
     }
 
+    //verifie si deux chemins sont connectés en regardant l'axe en commun
     public VertexLocation cheminsConnectesAAutre (Chemin ch, Chemin autre ) {
         int ch_x = ch.getLocation().getX();
         int ch_y = ch.getLocation().getY();
@@ -699,15 +701,14 @@ public class Board {
     }
 
     /*
-    int portTag if port, -1 if not
-	 *  			  0 = general
-					  1 = Argile
-					  2 = Mouton
-					  3 = Pierre
-					  4 = Blé
-					  5 = Bois
+    la fonction checkPort() [ci-dessus] retourne -1 si c'est la localisation donnee en paramètre n'est pas un port. Sinon:
+	   			  0 = general
+				  1 = Argile
+				  2 = Mouton
+				  3 = Pierre
+				  4 = Blé
+				  5 = Bois
      */
-
     public int checkPort (VertexLocation location) {
         int x = location.getX();
         int y = location.getY();
