@@ -23,7 +23,7 @@ public class InstructionsWndow extends JFrame {
                 "Les fiches spéciales Route la plus longue (*) et Armée la plus puissante (\u001F) sont placées à côté de la zone de jeu, ainsi que les 2 dés.\n" +
                 "Les cartes Ressource sont triées en 5 piles, par type et placées face visible dans les compartiments du jeu dédiés à cette f in. Les compartiments sont disposés à proximité de la zone de jeu :");
         this.add(text);
-
+        this.setLocationRelativeTo(null);
     }
 
     public void setStatus (boolean status) {

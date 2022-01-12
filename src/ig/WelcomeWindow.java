@@ -11,11 +11,12 @@ public class WelcomeWindow extends JFrame {
 
     private JLabel background;
     private InstructionsWndow iw;
+    private ConfigurationWindow cw;
     private ImageIcon fond;
 
     public WelcomeWindow() {
 
-        this.fond = new ImageIcon("./images/catan_intro_2.jpg");
+        this.fond = new ImageIcon("./images/catan_intro_3.jpg");
 
         //On initialise les valeurs de base de la fenêtre
         this.setTitle("Les Colons de Catan!");
@@ -24,18 +25,18 @@ public class WelcomeWindow extends JFrame {
 
         //L'arrière-plan avec une image
         this.background = new JLabel(this.fond);
-        this.background = new JLabel("Hola",fond,JLabel.CENTER);
+        this.background = new JLabel("",fond,JLabel.CENTER);
         this.background.setBounds(0,0,fond.getIconWidth(), fond.getIconHeight());
         this.add(this.background);
 
         //On crée un JPanel pour y mettre les boutons
         JPanel allButtoms = new JPanel();
-        allButtoms.setLayout(null/*new FlowLayout(FlowLayout.CENTER)*/);
+        allButtoms.setLayout(new FlowLayout(FlowLayout.TRAILING));
         this.add(allButtoms,BorderLayout.CENTER);
 
         //On initialise les "valeurs" des boutons
         this.iw = new InstructionsWndow();
-
+        this.cw = new ConfigurationWindow();
 
         JPanel bouton1 = new JPanel();
         JPanel bouton2 = new JPanel();
@@ -43,8 +44,8 @@ public class WelcomeWindow extends JFrame {
 
 
         JButton jouer = new UIButton("Jouer");
-
-        GridBagConstraints constraints = new GridBagConstraints();
+        jouer.addActionListener(event -> this.cw.setStatus(true));
+        //GridBagConstraints constraints = new GridBagConstraints();
 
         JButton instru = new UIButton("Comment jouer?");
         instru.addActionListener(event -> this.iw.setStatus(true));
